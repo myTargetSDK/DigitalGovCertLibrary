@@ -16,28 +16,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <RadioButton
-            android:id="@+id/rbRetrofit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Retrofit" />
-
-        <RadioButton
             android:id="@+id/rbHttpUrlConnection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HttpUrlConnection" />
+            android:text="@string/httpurlconnection" />
 
         <RadioButton
             android:id="@+id/rbOkHttp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OkHttp" />
+            android:text="@string/okhttp" />
 
         <RadioButton
             android:id="@+id/rbWebView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="WebView" />
+            android:text="@string/webview" />
 
     </RadioGroup>
 
@@ -46,18 +40,42 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="min Cert enable"
+        android:text="@string/min_cert_enable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
         android:id="@+id/btnLoad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Load"
+        android:text="@string/load"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/swMinCert" />
+
+    <LinearLayout
+        android:layout_width="409dp"
+        android:layout_height="486dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoad">
+
+        <TextView
+            android:id="@+id/tvResultCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

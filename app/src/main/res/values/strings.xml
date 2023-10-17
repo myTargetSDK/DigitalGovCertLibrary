@@ -28,4 +28,9 @@
         sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo
         luctus vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="httpurlconnection">HttpUrlConnection</string>
+    <string name="okhttp">OkHttp</string>
+    <string name="webview">WebView</string>
+    <string name="min_cert_enable">min Cert enable</string>
+    <string name="load">Load</string>
 </resources>

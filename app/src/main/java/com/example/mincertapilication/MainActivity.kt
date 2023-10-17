@@ -1,38 +1,27 @@
 package com.example.mincertapilication
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.example.mincertapilication.SslUtils.getSslContextForCertificateFile
 import com.example.mincertapilication.databinding.ActivityMainBinding
+import com.mincert.library.MinCertUtils
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.BufferedReader
 import java.io.BufferedWriter
-import java.io.ByteArrayInputStream
 import java.io.IOException
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
-import java.security.KeyStore
-import java.security.cert.CertificateFactory
 import javax.net.ssl.HttpsURLConnection
-import javax.net.ssl.TrustManagerFactory
-
-private val ROOT_CERTIFICATE = "root"
-private val SUB_CERTIFICATE = "sub"
+import javax.net.ssl.SSLSocketFactory
 
 class MainActivity : AppCompatActivity()
 {
+    private val URL = "https://mincertad.mail.ru/9525"
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
-
-
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -40,143 +29,142 @@ class MainActivity : AppCompatActivity()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
 
         binding.btnLoad.setOnClickListener {
-            //viewModel.getJson("https://mincertad.mail.ru/9525", this)
-            Thread {
 
-                var inputStream: InputStream? = null
-                val sslContext = getSslContextForCertificateFile(this@MainActivity, "russian_trusted_root_ca")
-                HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.socketFactory)
-
-                try
+            when (binding.radioGroup.checkedRadioButtonId)
+            {
+                R.id.rbHttpUrlConnection ->
                 {
-                    val _url = URL("https://mincertad.mail.ru/9525")
-                    val urlConn = _url.openConnection() as HttpURLConnection
-                    urlConn.setRequestProperty("Content-Type", "applicaiton/json; charset=utf-8")
-                    urlConn.setRequestProperty("Accept", "applicaiton/json")
-                    urlConn.doOutput = true
-                    urlConn.connect()
-                    val writer = BufferedWriter(OutputStreamWriter(urlConn.outputStream))
-                    writer.flush()
-                    writer.close()
-                    inputStream = if (urlConn.responseCode == HttpURLConnection.HTTP_OK)
-                    {
-                        urlConn.inputStream
-                    } else
-                    {
-                        urlConn.errorStream
-                    }
-                } catch (thrwobale: Throwable)
-                {
-                    thrwobale.printStackTrace()
+                    loadByHttpUrlConnection()
                 }
 
-                var response: String? = null
-                try
+                R.id.rbOkHttp ->
                 {
-                    val reader = BufferedReader(
-                        InputStreamReader(inputStream, "UTF-8"), 8
-                    )
-                    val sb = StringBuilder()
-                    var line: String? = null
-                    while (reader.readLine().also { line = it } != null)
-                    {
-                        sb.append(
-                            """
+                    loadByOkHttp()
+                }
+
+                R.id.rbWebView ->
+                {
+                    loadByWebView()
+                }
+            }
+        }
+    }
+
+    private fun loadByWebView()
+    {
+        val intent = Intent(this, WebViewActivity::class.java)
+        intent.putExtra("URL", URL)
+        intent.putExtra("isUsingMinCert", binding.swMinCert.isChecked)
+
+        startActivity(intent)
+    }
+
+    private fun loadByOkHttp()
+    {
+        Thread {
+            val request: Request = Request.Builder()
+                .url(URL)
+                .build()
+
+            val httpClient: OkHttpClient = if (binding.swMinCert.isChecked)
+            {
+                val minCertUtils = MinCertUtils(this)
+                minCertUtils.init()
+                OkHttpClient
+                    .Builder()
+                    .sslSocketFactory(minCertUtils.sslContext!!.socketFactory, minCertUtils.x509TrustManager!!)
+                    .build()
+            } else
+            {
+                OkHttpClient()
+            }
+
+            try
+            {
+                httpClient.newCall(request).execute().use { response ->
+                    processResult(response.code, response.body!!.string())
+                }
+            } catch (e: IOException)
+            {
+                processResult(-1, e.message ?: "undefined error")
+            }
+        }.start()
+    }
+
+    private fun loadByHttpUrlConnection()
+    {
+        Thread {
+            val minCertUtils = MinCertUtils(this)
+            minCertUtils.init()
+
+            if (binding.swMinCert.isChecked)
+            {
+                HttpsURLConnection.setDefaultSSLSocketFactory(minCertUtils.sslContext!!.socketFactory)
+            } else
+            {
+                HttpsURLConnection.setDefaultSSLSocketFactory(SSLSocketFactory.getDefault() as SSLSocketFactory)
+            }
+
+            try
+            {
+                val url = URL(URL)
+                val urlConn = url.openConnection() as HttpURLConnection
+                urlConn.setRequestProperty("Content-Type", "applicaiton/json; charset=utf-8")
+                urlConn.setRequestProperty("Accept", "applicaiton/json")
+                urlConn.doOutput = true
+                urlConn.connect()
+
+                val writer = BufferedWriter(OutputStreamWriter(urlConn.outputStream))
+                writer.flush()
+                writer.close()
+
+                val inputStream = if (urlConn.responseCode == HttpURLConnection.HTTP_OK)
+                {
+                    urlConn.inputStream
+                } else
+                {
+                    urlConn.errorStream
+                }
+
+                val reader = BufferedReader(
+                    InputStreamReader(inputStream, "UTF-8"), 8
+                )
+                val sb = StringBuilder()
+                var line: String?
+                while (reader.readLine().also { line = it } != null)
+                {
+                    sb.append(
+                        """
                     $line
                     
                     """.trimIndent()
-                        )
-                    }
-                    inputStream?.close()
-                    response = sb.toString()
-                    Log.e("JSON", response)
-                } catch (e: Exception)
-                {
-                    Log.e("Buffer Error", "Error converting result $e")
+                    )
                 }
-            }.start()
-        }
-    }
+                inputStream?.close()
 
-    private fun readPemCert(certName: String): InputStream?
-    {
-        return fromPem(getPemAsString(certName))
-    }
+                val response = sb.toString()
 
-    private fun getPemAsString(certName: String): String
-    {
-        val ins = resources.openRawResource(
-            resources.getIdentifier(
-                certName, "raw", packageName
-            )
-        )
-        val textBuilder = java.lang.StringBuilder()
-        try
-        {
-            BufferedReader(InputStreamReader(ins, Charset.forName(StandardCharsets.UTF_8.name()))).use { reader ->
-                var c = 0
-                while (reader.read().also { c = it } != -1)
-                {
-                    textBuilder.append(c.toChar())
-                }
+                processResult(urlConn.responseCode, response)
+
+            } catch (throwable: Throwable)
+            {
+                processResult(-1, throwable.message ?: "undefined error")
+                throwable.printStackTrace()
             }
-        } catch (e: IOException)
-        {
-            Log.d("WEB_VIEW_EXAMPLE", "read pem error")
-        }
-        return textBuilder.toString()
+        }.start()
     }
 
-    @Throws(java.lang.Exception::class)
-    private fun initTrustStore(): TrustManagerFactory?
+    private fun processResult(resultCode: Int, result: String)
     {
-        return try
-        {
-            val cf = CertificateFactory.getInstance("X.509")
-            val subIns = readPemCert(SUB_CERTIFICATE)
-            val sub = cf.generateCertificate(subIns)
-            val rootIns = readPemCert(ROOT_CERTIFICATE)
-            val root = cf.generateCertificate(rootIns)
-            val keyStore = KeyStore.getInstance(KeyStore.getDefaultType())
-            keyStore.load(null, null)
-            keyStore.setCertificateEntry(SUB_CERTIFICATE, sub)
-            keyStore.setCertificateEntry(ROOT_CERTIFICATE, root)
-            val tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm()
-            val tmf = TrustManagerFactory.getInstance(tmfAlgorithm)
-            tmf.init(keyStore)
-            tmf
-        } catch (e: java.lang.Exception)
-        {
-            throw java.lang.Exception("Error during TrustManagerFactory initialization")
+        runOnUiThread {
+            binding.tvResultCode.text = "resultCode: $resultCode"
+            binding.tvResult.text = result
+
         }
     }
-
-    private fun fromPem(pem: String): InputStream?
-    {
-        val base64cert = pemKeyContent(pem)
-        return fromBase64String(base64cert)
-    }
-
-    private fun fromBase64String(base64cert: String): InputStream?
-    {
-        val decoded = Base64.decode(base64cert, Base64.NO_WRAP)
-        return ByteArrayInputStream(decoded)
-    }
-
-    private fun pemKeyContent(pem: String): String
-    {
-        return pem.replace("\\s+", "")
-            .replace("\n", "")
-            .replace("-----BEGIN PUBLIC KEY-----", "")
-            .replace("-----END PUBLIC KEY-----", "")
-            .replace("-----BEGIN CERTIFICATE-----", "")
-            .replace("-----END CERTIFICATE-----", "")
-    }
-
 }
+
 
 
