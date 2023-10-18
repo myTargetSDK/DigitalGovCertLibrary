@@ -32,11 +32,15 @@ android {
 
 tasks.register('sourcesJar', Jar) {
 
-  
+
 }
 
 artifacts {
     archives sourcesJar
+}
+
+publishing {
+    publishToMavenLocal
 }
 
 dependencies {
