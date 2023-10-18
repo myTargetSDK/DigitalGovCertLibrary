@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 	<version>1.4.2-SNAPSHOT</version>
     <groupId>com.mincert.library</groupId>
-    <artifactId>1.0</artifactId>
+    <artifactId>1.0.14</artifactId>
     <name>mylibrary</name>
 	<description>A simple Android chart view/graph view library, supporting line- bar- and piecharts as well as scaling, dragging and animations</description>
 	<url>com.github.RinJavDev:MinCertSdk</url>
