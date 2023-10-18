@@ -30,9 +30,9 @@ android {
 
 }
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.javaDirectories
+tasks.register('sourcesJar', Jar) {
+
+  
 }
 
 artifacts {
