@@ -62,6 +62,11 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")
     implementation ("com.squareup.retrofit2:retrofit:2.1.0")
 
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+    //implementation ("com.github.RinJavDev:MinCertSdk:-SNAPSHOT")
+
     implementation(project(mapOf("path" to ":mylibrary")))
 
 }
