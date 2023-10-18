@@ -4,9 +4,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 	<version>1.4.2-SNAPSHOT</version>
-    <groupId>com.github.RinJavDev:MinCertSdk</groupId>
-    <artifactId>MinCertSdk</artifactId>
-    <name>MinCertSdk</name>
+    <groupId>com.mincert.library</groupId>
+    <artifactId>1.0</artifactId>
+    <name>mylibrary</name>
 	<description>A simple Android chart view/graph view library, supporting line- bar- and piecharts as well as scaling, dragging and animations</description>
 	<url>com.github.RinJavDev:MinCertSdk</url>
     <packaging>apklib</packaging>
