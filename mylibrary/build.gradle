@@ -36,15 +36,6 @@ dependencies {
 }
 
 afterEvaluate {
-    publishing {
-        publications {
-            // Creates a Maven publication called "release".
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.mincert.library'
-                artifactId = 'mincert'
-                version = '1.0'
-            }
-        }
-    }
+    publishToMavenLocal
 }
+
