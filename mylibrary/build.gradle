@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 var group = 'com.mincert.library'
-var version = '1.0.16'
+var version = '1.0.17'
 
 android {
     compileSdkVersion 33
