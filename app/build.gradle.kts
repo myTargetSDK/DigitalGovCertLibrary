@@ -55,18 +55,13 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.8.0")
 
     implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
 
-    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation ("com.squareup.retrofit2:retrofit:2.1.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
-    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
-
-    //implementation ("com.github.RinJavDev:MinCertSdk:-SNAPSHOT")
-
+    //implementation ("com.github.RinJavDev:MinCertSdk:1.0.15")
     implementation(project(mapOf("path" to ":mylibrary")))
 
 }
