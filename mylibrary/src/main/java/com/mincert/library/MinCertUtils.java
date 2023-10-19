@@ -16,6 +16,9 @@ import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -29,10 +32,12 @@ public class MinCertUtils
 {
 	private final static String ROOT_CERTIFICATE = "root";
 	private final static String SUB_CERTIFICATE = "sub";
+
 	private final @NonNull Context context;
 	@Nullable X509TrustManager x509TrustManager;
 	@Nullable SSLContext sslContext;
 	@Nullable TrustManagerFactory trustManagerFactory;
+
 	public MinCertUtils(final @NonNull Context context)
 	{
 		this.context = context;
@@ -53,7 +58,7 @@ public class MinCertUtils
 		return sslContext;
 	}
 
-	public void init() throws Exception
+	public void init() throws Throwable
 	{
 		try
 		{
@@ -70,6 +75,13 @@ public class MinCertUtils
 			keyStore.load(null, null);
 			keyStore.setCertificateEntry(SUB_CERTIFICATE, sub);
 			keyStore.setCertificateEntry(ROOT_CERTIFICATE, root);
+
+			final ArrayList<X509Certificate> certificates = getSystemCerts();
+			for (X509Certificate certificate : certificates)
+			{
+				keyStore.setCertificateEntry(certificate.getIssuerDN().getName(), certificate);
+			}
+
 			final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 			final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
 
@@ -80,11 +92,48 @@ public class MinCertUtils
 		}
 		catch (Throwable e)
 		{
-			throw new Exception("Error during TrustManagerFactory initialization");
+			throw new Exception("Error during TrustManagerFactory initialization " + e.getMessage());
 		}
 	}
 
-	void initX509TrustManager(TrustManagerFactory trustManagerFactory) throws Throwable
+	private @NonNull ArrayList<X509Certificate> getSystemCerts()
+	{
+		final ArrayList<X509Certificate> certificates = new ArrayList<>();
+		try
+		{
+			final KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+
+			if (ks != null)
+			{
+				ks.load(null, null);
+				final Enumeration<String> aliases = ks.aliases();
+
+				while (aliases.hasMoreElements())
+				{
+					try
+					{
+
+						String alias = aliases.nextElement();
+
+						X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
+
+						certificates.add(cert);
+					}
+					catch (Throwable throwable)
+					{
+						throwable.printStackTrace();
+					}
+				}
+			}
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+		}
+		return certificates;
+	}
+
+	private void initX509TrustManager(TrustManagerFactory trustManagerFactory)
 	{
 
 		for (TrustManager trustManager : trustManagerFactory.getTrustManagers())
