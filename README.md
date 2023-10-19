@@ -20,16 +20,16 @@ implementation ("com.github.RinJavDev:MinCertSdk:1.0.19")
     val minCertUtils = MinCertUtils(context)
     minCertUtils.init()
     
-     OkHttpClient.Builder()
-        .sslSocketFactory(minCertUtils.sslContext!!.socketFactory, minCertUtils.x509TrustManager!!)
-        .build()
-        //todo use OkHttpClient
+    OkHttpClient.Builder()
+    .sslSocketFactory(minCertUtils.sslContext!!.socketFactory, minCertUtils.x509TrustManager!!)
+    .build()
+    //todo use OkHttpClient
 ```
 
 #### Пример использования с HttpUrlConnection
 ```kotlin
-     val minCertUtils = MinCertUtils(context)
-     minCertUtils.init()
+    val minCertUtils = MinCertUtils(context)
+    minCertUtils.init()
      
     HttpsURLConnection.setDefaultSSLSocketFactory(SSLSocketFactory.getDefault() as SSLSocketFactory)
     //todo use HttpConnection library
@@ -98,7 +98,9 @@ implementation ("com.github.RinJavDev:MinCertSdk:1.0.19")
 		}
 	}
 }
+
 ...
+
  val minCertUtils = MinCertUtils(this)
  minCertUtils.init()
             
