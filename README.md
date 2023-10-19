@@ -28,7 +28,7 @@ implementation ("com.github.RinJavDev:MinCertSdk:1.0.19")
     val minCertUtils = MinCertUtils(context)
     minCertUtils.init()
      
-    HttpsURLConnection.setDefaultSSLSocketFactory(SSLSocketFactory.getDefault() as SSLSocketFactory)
+    HttpsURLConnection.setDefaultSSLSocketFactory(minCertUtils.sslContext!!.socketFactory)
     //todo use HttpConnection library
 ```
 
