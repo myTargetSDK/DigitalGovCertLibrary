@@ -2,9 +2,6 @@
 
 #### Данное сдк позволяет програмно поддержать сертификаты от минцифры в andrpid-приложении.
 
-
-## Installation
-
 ### Пример использования 
 
 #### Добавить нужные зависимости
@@ -101,7 +98,7 @@ implementation ("com.github.RinJavDev:MinCertSdk:1.0.19")
 
 ...
 
- val minCertUtils = MinCertUtils(this)
+ val minCertUtils = MinCertUtils(context)
  minCertUtils.init()
             
  webView.webViewClient = CheckServerTrustedWebViewClient(minCertUtils.trustManagerFactory)
