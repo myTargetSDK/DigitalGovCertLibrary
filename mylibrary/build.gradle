@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 var group = 'com.mincert.library'
-var version = '1.0.18'
+var version = '1.0.19'
 
 android {
     compileSdkVersion 33
