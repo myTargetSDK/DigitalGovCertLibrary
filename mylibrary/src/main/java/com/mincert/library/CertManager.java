@@ -1,10 +1,13 @@
 package com.mincert.library;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import androidx.annotation.Nullable;
 
 public class CertManager
 {
+	final static String TAG = "CertManager";
 	private final @NonNull List<String> rawCertNames;
 
 	public CertManager()
@@ -29,61 +33,122 @@ public class CertManager
 		rawCertNames.add("sub");
 	}
 
-	public @NonNull CertData makeCertData(final @Nullable Context context) throws Throwable
+	public @Nullable CertData makeCertData(final @Nullable Context context)
 	{
 		if (context == null)
 		{
-			throw new Exception("Error make certData – context is null");
+			Log.d(TAG, "Error make certData – context is null");
+			return null;
 		}
 
-		final CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+		final CertificateFactory certificateFactory = getCertificateFactory();
 		if (certificateFactory == null)
 		{
-			throw new Exception("Error make certData – certificate factory is null");
+			Log.d(TAG, "Error make certData – certificateFactory is null");
+			return null;
+		}
+
+		final KeyStore keyStore = getKeyStore();
+		if (keyStore == null)
+		{
+			Log.d(TAG, "Error make certData – keyStore is null");
+			return null;
 		}
 
 		final CertLoader certLoader = new CertLoader(context, certificateFactory);
-		final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-		keyStore.load(null, null);
-
 		for (String rawCertName : rawCertNames)
 		{
 			final Certificate rawCert = certLoader.getRawCert(rawCertName);
 			if (rawCert != null)
 			{
-				keyStore.setCertificateEntry(rawCertName, rawCert);
+				try
+				{
+					keyStore.setCertificateEntry(rawCertName, rawCert);
+				}
+				catch (KeyStoreException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 
 		final ArrayList<X509Certificate> systemCerts = certLoader.getSystemCerts();
 		for (X509Certificate certificate : systemCerts)
 		{
-			keyStore.setCertificateEntry(certificate.getIssuerDN().getName(), certificate);
+			try
+			{
+				keyStore.setCertificateEntry(certificate.getIssuerDN().getName(), certificate);
+			}
+			catch (KeyStoreException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		final TrustManagerFactory trustManagerFactory = getTrustManagerFactory(keyStore);
+		if (trustManagerFactory == null)
+		{
+			Log.d(TAG, "Error make certData – trustManagerFactory is null");
+			return null;
+		}
 
 		final X509TrustManager x509TrustManager = getX509TrustManager(trustManagerFactory);
 		if (x509TrustManager == null)
 		{
-			throw new Exception("Error during TrustManagerFactory initialization " + "can't initialize x509TrustManager");
+			Log.d(TAG, "Error make certData – x509TrustManager is null");
+			return null;
 		}
 
 		final SSLContext sslContext = getSslContext(trustManagerFactory);
-
+		if (sslContext == null)
+		{
+			Log.d(TAG, "Error make certData – sslContext is null");
+			return null;
+		}
 		return new CertData(x509TrustManager, sslContext, trustManagerFactory);
 	}
 
-	@NonNull TrustManagerFactory getTrustManagerFactory(final @NonNull KeyStore keyStore) throws Exception
+	@Nullable CertificateFactory getCertificateFactory()
+	{
+		try
+		{
+			return CertificateFactory.getInstance("X.509");
+		}
+		catch (CertificateException e)
+		{
+			Log.d(TAG, "Error make certData – certificate factory is null");
+			return null;
+		}
+	}
+
+	@Nullable KeyStore getKeyStore()
+	{
+		try
+		{
+			final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			keyStore.load(null, null);
+			return keyStore;
+		}
+		catch (Throwable e)
+		{
+			return null;
+		}
+	}
+
+	@Nullable TrustManagerFactory getTrustManagerFactory(final @NonNull KeyStore keyStore)
 	{
 		final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-		final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm);
-		if (trustManagerFactory == null)
+		try
 		{
-			throw new Exception("Error during TrustManagerFactory initialization " + "can't initialize trust manager factory");
+			final TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(tmfAlgorithm);
+			trustManagerFactory.init(keyStore);
+			return trustManagerFactory;
 		}
-		trustManagerFactory.init(keyStore);
-		return trustManagerFactory;
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private @Nullable X509TrustManager getX509TrustManager(final @NonNull TrustManagerFactory trustManagerFactory)
@@ -100,11 +165,18 @@ public class CertManager
 	}
 
 
-	private @NonNull SSLContext getSslContext(final @NonNull TrustManagerFactory trustManagerFactory) throws Throwable
+	private @Nullable SSLContext getSslContext(final @NonNull TrustManagerFactory trustManagerFactory)
 	{
-		final SSLContext sslContext = SSLContext.getInstance("SSL");
-		sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
-		return sslContext;
+		try
+		{
+			final SSLContext sslContext = SSLContext.getInstance("SSL");
+			sslContext.init(null, trustManagerFactory.getTrustManagers(), new SecureRandom());
+			return sslContext;
+		}
+		catch (Throwable e)
+		{
+			return null;
+		}
 	}
 }
 
