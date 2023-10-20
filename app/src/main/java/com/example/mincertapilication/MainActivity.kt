@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mincertapilication.databinding.ActivityMainBinding
-import com.mincert.library.MinCertUtils
+import com.mincert.library.CertManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.BufferedReader
@@ -70,11 +70,11 @@ class MainActivity : AppCompatActivity()
 
             val httpClient: OkHttpClient = if (binding.swMinCert.isChecked)
             {
-                val minCertUtils = MinCertUtils(this)
-                minCertUtils.init()
+                val certManager = CertManager()
+                val certData = certManager.makeCertData(this)
                 OkHttpClient
                     .Builder()
-                    .sslSocketFactory(minCertUtils.sslContext!!.socketFactory, minCertUtils.x509TrustManager!!)
+                    .sslSocketFactory(certData.sslContext.socketFactory, certData.x509TrustManager)
                     .build()
             } else
             {
@@ -96,12 +96,12 @@ class MainActivity : AppCompatActivity()
     private fun loadByHttpUrlConnection()
     {
         Thread {
-            val minCertUtils = MinCertUtils(this)
-            minCertUtils.init()
+            val certManager = CertManager()
+            val certData = certManager.makeCertData(this)
 
             if (binding.swMinCert.isChecked)
             {
-                HttpsURLConnection.setDefaultSSLSocketFactory(minCertUtils.sslContext!!.socketFactory)
+                HttpsURLConnection.setDefaultSSLSocketFactory(certData.sslContext.socketFactory)
             } else
             {
                 HttpsURLConnection.setDefaultSSLSocketFactory(SSLSocketFactory.getDefault() as SSLSocketFactory)
