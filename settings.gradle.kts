@@ -17,4 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MinCertApilication"
 include(":app")
-include(":mylibrary")
+include(":sdk")
