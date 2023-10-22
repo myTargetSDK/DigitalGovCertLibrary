@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mincertapilication.databinding.ActivityMainBinding
-import com.mincert.library.CertManager
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import ru.digitalGovCert.library.CertManager
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.IOException

@@ -1,4 +1,4 @@
-package com.mincert.library;
+package ru.digitalGovCert.library;
 
 import android.content.Context;
 import android.util.Base64;

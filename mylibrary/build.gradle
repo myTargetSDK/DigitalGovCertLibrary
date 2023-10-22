@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'maven-publish'
 }
-var group = 'com.mincert.library'
+var group = 'ru.digitalGovCert.library'
 var version = '1.0.19'
 
 android {
@@ -47,7 +47,7 @@ publishing {
     publications {
         register("release", MavenPublication) {
             groupId = group
-            artifactId = "mylibrary"
+            artifactId = "library"
             this.version = version
 
             afterEvaluate {

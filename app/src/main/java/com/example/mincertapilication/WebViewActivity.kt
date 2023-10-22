@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mincertapilication.databinding.ActivityWebViewBinding
-import com.mincert.library.CertManager
+import ru.digitalGovCert.library.CertManager
 
 class WebViewActivity : AppCompatActivity()
 {
@@ -18,7 +18,7 @@ class WebViewActivity : AppCompatActivity()
         if (intent.getBooleanExtra("isUsingMinCert", false))
         {
             val certManager = CertManager()
-            val  certData = certManager.createCertData(this)!!
+            val certData = certManager.createCertData(this)!!
             binding.root.webViewClient = CheckServerTrustedWebViewClient(certData.trustManagerFactory)
         } else
         {

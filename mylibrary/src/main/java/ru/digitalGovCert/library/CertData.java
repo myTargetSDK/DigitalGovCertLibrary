@@ -1,4 +1,4 @@
-package com.mincert.library;
+package ru.digitalGovCert.library;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
