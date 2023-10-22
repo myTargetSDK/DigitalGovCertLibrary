@@ -33,7 +33,7 @@ public class CertManager
 		rawCertNames.add("sub");
 	}
 
-	public @Nullable CertData makeCertData(final @Nullable Context context)
+	public @Nullable CertData createCertData(final @Nullable Context context)
 	{
 		if (context == null)
 		{
@@ -41,14 +41,14 @@ public class CertManager
 			return null;
 		}
 
-		final CertificateFactory certificateFactory = getCertificateFactory();
+		final CertificateFactory certificateFactory = createCertificateFactory();
 		if (certificateFactory == null)
 		{
 			Log.d(TAG, "Error make certData – certificateFactory is null");
 			return null;
 		}
 
-		final KeyStore keyStore = getKeyStore();
+		final KeyStore keyStore = createKeyStore();
 		if (keyStore == null)
 		{
 			Log.d(TAG, "Error make certData – keyStore is null");
@@ -85,21 +85,21 @@ public class CertManager
 			}
 		}
 
-		final TrustManagerFactory trustManagerFactory = getTrustManagerFactory(keyStore);
+		final TrustManagerFactory trustManagerFactory = createTrustManagerFactory(keyStore);
 		if (trustManagerFactory == null)
 		{
 			Log.d(TAG, "Error make certData – trustManagerFactory is null");
 			return null;
 		}
 
-		final X509TrustManager x509TrustManager = getX509TrustManager(trustManagerFactory);
+		final X509TrustManager x509TrustManager = findX509TrustManager(trustManagerFactory);
 		if (x509TrustManager == null)
 		{
 			Log.d(TAG, "Error make certData – x509TrustManager is null");
 			return null;
 		}
 
-		final SSLContext sslContext = getSslContext(trustManagerFactory);
+		final SSLContext sslContext = createSslContext(trustManagerFactory);
 		if (sslContext == null)
 		{
 			Log.d(TAG, "Error make certData – sslContext is null");
@@ -108,7 +108,7 @@ public class CertManager
 		return new CertData(x509TrustManager, sslContext, trustManagerFactory);
 	}
 
-	@Nullable CertificateFactory getCertificateFactory()
+	@Nullable CertificateFactory createCertificateFactory()
 	{
 		try
 		{
@@ -121,7 +121,7 @@ public class CertManager
 		}
 	}
 
-	@Nullable KeyStore getKeyStore()
+	@Nullable KeyStore createKeyStore()
 	{
 		try
 		{
@@ -135,7 +135,7 @@ public class CertManager
 		}
 	}
 
-	@Nullable TrustManagerFactory getTrustManagerFactory(final @NonNull KeyStore keyStore)
+	@Nullable TrustManagerFactory createTrustManagerFactory(final @NonNull KeyStore keyStore)
 	{
 		final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 		try
@@ -151,7 +151,7 @@ public class CertManager
 		}
 	}
 
-	private @Nullable X509TrustManager getX509TrustManager(final @NonNull TrustManagerFactory trustManagerFactory)
+	private @Nullable X509TrustManager findX509TrustManager(final @NonNull TrustManagerFactory trustManagerFactory)
 	{
 
 		for (TrustManager trustManager : trustManagerFactory.getTrustManagers())
@@ -165,7 +165,7 @@ public class CertManager
 	}
 
 
-	private @Nullable SSLContext getSslContext(final @NonNull TrustManagerFactory trustManagerFactory)
+	private @Nullable SSLContext createSslContext(final @NonNull TrustManagerFactory trustManagerFactory)
 	{
 		try
 		{
