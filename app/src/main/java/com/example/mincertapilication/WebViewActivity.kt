@@ -18,7 +18,7 @@ class WebViewActivity : AppCompatActivity()
         if (intent.getBooleanExtra("isUsingMinCert", false))
         {
             val certManager = CertManager()
-            val  certData = certManager.makeCertData(this)!!
+            val  certData = certManager.createCertData(this)!!
             binding.root.webViewClient = CheckServerTrustedWebViewClient(certData.trustManagerFactory)
         } else
         {

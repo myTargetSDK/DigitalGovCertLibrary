@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity()
             val httpClient: OkHttpClient = if (binding.swMinCert.isChecked)
             {
                 val certManager = CertManager()
-                val certData = certManager.makeCertData(this)!!
+                val certData = certManager.createCertData(this)!!
                 OkHttpClient
                     .Builder()
                     .sslSocketFactory(certData.sslContext.socketFactory, certData.x509TrustManager)
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity()
     {
         Thread {
             val certManager = CertManager()
-            val certData = certManager.makeCertData(this)!!
+            val certData = certManager.createCertData(this)!!
 
             if (binding.swMinCert.isChecked)
             {
