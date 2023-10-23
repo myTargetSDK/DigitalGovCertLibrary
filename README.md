@@ -16,10 +16,11 @@ implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
 ```kotlin
     val certManager = CertManager()
     val certData = certManager.createCertData(this@MainActivity)!!
-    val httpClient= OkHttpClient
+    val httpClient = OkHttpClient
     .Builder()
     .sslSocketFactory(certData.sslContext.socketFactory, certData.x509TrustManager)
     .build()
+    
     //todo use OkHttpClient
 ```
 
@@ -51,6 +52,6 @@ implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
         }
     }
     
-     webView.loadUrl("https://www.google.com/")
+    webView.loadUrl("https://www.google.com/")
 ```
 
