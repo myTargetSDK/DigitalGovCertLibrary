@@ -21,6 +21,10 @@ import javax.net.ssl.X509TrustManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+
+/**
+ * Сlass for working with SSL certificates that support Ministry of Digital Development certificates
+ */
 public class CertManager
 {
 	final static String TAG = "CertManager";
@@ -33,6 +37,11 @@ public class CertManager
 		rawCertNames.add("sub");
 	}
 
+	/**
+	 * createCert and return {@link CertData}.
+	 *
+	 * @param context {@link Context}.
+	 */
 	public @Nullable CertData createCertData(final @Nullable Context context)
 	{
 		if (context == null)

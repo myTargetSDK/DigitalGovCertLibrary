@@ -12,8 +12,17 @@ import javax.net.ssl.X509TrustManager;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Class for handling SSL errors
+ */
 public class SslErrorVerifier
 {
+	/**
+	 * Returns the result of checking the validity of an SSL certificate {@link Boolean}
+	 *
+	 * @param error               {@link SslError}.
+	 * @param trustManagerFactory {@link TrustManagerFactory}.
+	 */
 	public static boolean verifySslError(final @NonNull SslError error, final @NonNull TrustManagerFactory trustManagerFactory)
 	{
 		if (error.getPrimaryError() == SslError.SSL_UNTRUSTED)
