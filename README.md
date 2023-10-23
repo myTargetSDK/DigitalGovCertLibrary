@@ -1,6 +1,7 @@
 # Сертификаты минцифры
 
 #### Данное сдк позволяет програмно поддержать сертификаты от минцифры в andrpid-приложении.
+##### Поддерживаемые сертификаты для операционной системы Android взяты с официального сайта  [госуслуг](https://www.gosuslugi.ru/crt).
 
 ## Пример использования 
 
@@ -54,4 +55,3 @@ implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
     
     webView.loadUrl("https://www.google.com/")
 ```
-
