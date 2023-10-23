@@ -108,7 +108,7 @@ public class CertManager
 		return new CertData(x509TrustManager, sslContext, trustManagerFactory);
 	}
 
-	@Nullable CertificateFactory createCertificateFactory()
+	private @Nullable CertificateFactory createCertificateFactory()
 	{
 		try
 		{
@@ -121,7 +121,7 @@ public class CertManager
 		}
 	}
 
-	@Nullable KeyStore createKeyStore()
+	private @Nullable KeyStore createKeyStore()
 	{
 		try
 		{
@@ -135,7 +135,7 @@ public class CertManager
 		}
 	}
 
-	@Nullable TrustManagerFactory createTrustManagerFactory(final @NonNull KeyStore keyStore)
+	private @Nullable TrustManagerFactory createTrustManagerFactory(final @NonNull KeyStore keyStore)
 	{
 		final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 		try

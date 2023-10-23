@@ -3,7 +3,11 @@ package com.example.mincertapilication
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.mincertapilication.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import ru.digitalGovCert.library.CertManager
@@ -19,14 +23,12 @@ import javax.net.ssl.SSLSocketFactory
 
 class MainActivity : AppCompatActivity()
 {
-    private val URL = "https://mincertad.mail.ru/9525"
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -55,15 +57,17 @@ class MainActivity : AppCompatActivity()
     private fun loadByWebView()
     {
         val intent = Intent(this, WebViewActivity::class.java)
-        intent.putExtra("URL", URL)
-        intent.putExtra("isUsingMinCert", binding.swMinCert.isChecked)
+        intent.putExtra(WebViewActivity.URL_EXTRA, URL)
+        intent.putExtra(WebViewActivity.TO_USE_CERT, binding.swMinCert.isChecked)
 
         startActivity(intent)
     }
 
     private fun loadByOkHttp()
     {
-        Thread {
+        changeLoadingViewState(true)
+
+        lifecycleScope.launch(Dispatchers.IO) {
             val request: Request = Request.Builder()
                 .url(URL)
                 .build()
@@ -71,7 +75,7 @@ class MainActivity : AppCompatActivity()
             val httpClient: OkHttpClient = if (binding.swMinCert.isChecked)
             {
                 val certManager = CertManager()
-                val certData = certManager.createCertData(this)!!
+                val certData = certManager.createCertData(this@MainActivity)!!
                 OkHttpClient
                     .Builder()
                     .sslSocketFactory(certData.sslContext.socketFactory, certData.x509TrustManager)
@@ -90,14 +94,16 @@ class MainActivity : AppCompatActivity()
             {
                 processResult(-1, e.message ?: "undefined error")
             }
-        }.start()
+        }
     }
 
     private fun loadByHttpUrlConnection()
     {
-        Thread {
+        changeLoadingViewState(true)
+
+        lifecycleScope.launch(Dispatchers.IO) {
             val certManager = CertManager()
-            val certData = certManager.createCertData(this)!!
+            val certData = certManager.createCertData(this@MainActivity)!!
 
             if (binding.swMinCert.isChecked)
             {
@@ -153,18 +159,34 @@ class MainActivity : AppCompatActivity()
                 processResult(-1, throwable.message ?: "undefined error")
                 throwable.printStackTrace()
             }
-        }.start()
+        }
     }
 
     private fun processResult(resultCode: Int, result: String)
     {
-        runOnUiThread {
-            binding.tvResultCode.text = "resultCode: $resultCode"
-            binding.tvResult.text = result
+        lifecycleScope.launch(Dispatchers.Main) {
+            changeLoadingViewState(false)
+            binding.apply {
+                btnLoad.isEnabled = true
+                tvResultCode.text = "resultCode: $resultCode"
+                tvResult.text = result
+            }
+        }
+    }
 
+    private fun changeLoadingViewState(isLoading: Boolean)
+    {
+        binding.apply {
+            btnLoad.isEnabled = !isLoading
+            progressBar.isVisible = isLoading
+            if (isLoading)
+            {
+                tvResultCode.text = ""
+                tvResult.text = ""
+            }
         }
     }
 }
 
-
+const val URL = "https://www.sberbank.ru/"
 

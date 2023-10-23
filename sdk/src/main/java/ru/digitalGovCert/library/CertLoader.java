@@ -21,8 +21,7 @@ import java.util.Enumeration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-public class CertLoader
+class CertLoader
 {
 	private final @NonNull Context context;
 	private final @NonNull CertificateFactory certificateFactory;
@@ -33,7 +32,7 @@ public class CertLoader
 		this.certificateFactory = certificateFactory;
 	}
 
-	final @Nullable Certificate getRawCert(@NonNull String rawResourceName)
+	@Nullable Certificate getRawCert(@NonNull String rawResourceName)
 	{
 		final InputStream subIns = readPemCert(rawResourceName);
 		try
