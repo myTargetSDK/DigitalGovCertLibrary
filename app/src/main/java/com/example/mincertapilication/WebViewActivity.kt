@@ -23,7 +23,7 @@ class WebViewActivity : AppCompatActivity()
         binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val webView = binding.webView
-        if (intent.getBooleanExtra("isUsingMinCert", false))
+        if (intent.getBooleanExtra(TO_USE_CERT, false))
         {
             val certManager = CertManager()
             val certData = certManager.createCertData(this)!!
@@ -47,16 +47,15 @@ class WebViewActivity : AppCompatActivity()
         } else
         {
             webView.webViewClient = WebViewClient()
-
         }
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl(intent.getStringExtra("URL") ?: "")
+        webView.loadUrl(intent.getStringExtra(URL_EXTRA) ?: "")
 
     }
 
     companion object
     {
-        const val URL_EXTRA="URL_EXTRA"
+        const val URL_EXTRA = "URL_EXTRA"
         const val TO_USE_CERT = "TO_USE_CERT"
     }
 
