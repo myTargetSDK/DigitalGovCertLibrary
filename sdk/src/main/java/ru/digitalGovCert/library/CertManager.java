@@ -33,8 +33,8 @@ public final class CertManager
 	public CertManager()
 	{
 		rawCertNames = new ArrayList<>();
-		rawCertNames.add("root");
-		rawCertNames.add("sub");
+		rawCertNames.add("russian_trusted_root_ca");
+		rawCertNames.add("russian_trusted_sub_ca");
 	}
 
 	/**
