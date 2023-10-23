@@ -21,7 +21,8 @@ import java.util.Enumeration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-class CertLoader
+
+final class CertLoader
 {
 	private final @NonNull Context context;
 	private final @NonNull CertificateFactory certificateFactory;
@@ -32,7 +33,7 @@ class CertLoader
 		this.certificateFactory = certificateFactory;
 	}
 
-	@Nullable Certificate getRawCert(@NonNull String rawResourceName)
+	final @Nullable Certificate getRawCert(@NonNull String rawResourceName)
 	{
 		final InputStream subIns = readPemCert(rawResourceName);
 		try
@@ -45,7 +46,7 @@ class CertLoader
 		}
 	}
 
-	@NonNull ArrayList<X509Certificate> getSystemCerts()
+	final @NonNull ArrayList<X509Certificate> getSystemCerts()
 	{
 		final ArrayList<X509Certificate> certificates = new ArrayList<>();
 		try
@@ -81,12 +82,12 @@ class CertLoader
 		return certificates;
 	}
 
-	private InputStream readPemCert(final @NonNull String certName)
+	private final InputStream readPemCert(final @NonNull String certName)
 	{
 		return fromPem(getPemAsString(certName));
 	}
 
-	private String getPemAsString(final @NonNull String certName)
+	private final String getPemAsString(final @NonNull String certName)
 	{
 		final InputStream ins = context.getResources().openRawResource(
 				context.getResources().getIdentifier(
@@ -114,13 +115,13 @@ class CertLoader
 		return fromBase64String(base64cert);
 	}
 
-	private @NonNull InputStream fromBase64String(final @NonNull String base64cert)
+	private final @NonNull InputStream fromBase64String(final @NonNull String base64cert)
 	{
 		byte[] decoded = Base64.decode(base64cert, Base64.NO_WRAP);
 		return new ByteArrayInputStream(decoded);
 	}
 
-	private @NonNull String pemKeyContent(final @NonNull String pem)
+	private final @NonNull String pemKeyContent(final @NonNull String pem)
 	{
 		return pem.replace("\\s+", "")
 				  .replace("\n", "")

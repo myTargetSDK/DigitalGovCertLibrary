@@ -25,7 +25,7 @@ import androidx.annotation.Nullable;
 /**
  * Сlass for working with SSL certificates that support Ministry of Digital Development certificates
  */
-public class CertManager
+public final class CertManager
 {
 	final static String TAG = "CertManager";
 	private final @NonNull List<String> rawCertNames;
@@ -42,7 +42,7 @@ public class CertManager
 	 *
 	 * @param context {@link Context}.
 	 */
-	public @Nullable CertData createCertData(final @Nullable Context context)
+	public final @Nullable CertData createCertData(final @Nullable Context context)
 	{
 		if (context == null)
 		{
@@ -117,7 +117,7 @@ public class CertManager
 		return new CertData(x509TrustManager, sslContext, trustManagerFactory);
 	}
 
-	private @Nullable CertificateFactory createCertificateFactory()
+	private final @Nullable CertificateFactory createCertificateFactory()
 	{
 		try
 		{
@@ -130,7 +130,7 @@ public class CertManager
 		}
 	}
 
-	private @Nullable KeyStore createKeyStore()
+	private final @Nullable KeyStore createKeyStore()
 	{
 		try
 		{
@@ -144,7 +144,7 @@ public class CertManager
 		}
 	}
 
-	private @Nullable TrustManagerFactory createTrustManagerFactory(final @NonNull KeyStore keyStore)
+	private final @Nullable TrustManagerFactory createTrustManagerFactory(final @NonNull KeyStore keyStore)
 	{
 		final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 		try
@@ -160,7 +160,7 @@ public class CertManager
 		}
 	}
 
-	private @Nullable X509TrustManager findX509TrustManager(final @NonNull TrustManagerFactory trustManagerFactory)
+	private final @Nullable X509TrustManager findX509TrustManager(final @NonNull TrustManagerFactory trustManagerFactory)
 	{
 
 		for (TrustManager trustManager : trustManagerFactory.getTrustManagers())
@@ -174,7 +174,7 @@ public class CertManager
 	}
 
 
-	private @Nullable SSLContext createSslContext(final @NonNull TrustManagerFactory trustManagerFactory)
+	private final @Nullable SSLContext createSslContext(final @NonNull TrustManagerFactory trustManagerFactory)
 	{
 		try
 		{

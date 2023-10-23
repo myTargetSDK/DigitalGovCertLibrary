@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 /**
  * Class for handling SSL errors
  */
-public class SslErrorVerifier
+public final class SslErrorVerifier
 {
 	/**
 	 * Returns the result of checking the validity of an SSL certificate {@link Boolean}

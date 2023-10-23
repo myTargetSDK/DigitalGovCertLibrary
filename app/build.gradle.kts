@@ -62,6 +62,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
 
     implementation(project(mapOf("path" to ":sdk")))
-    //implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.21")
+    //implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
 
 }

@@ -6,7 +6,7 @@ import javax.net.ssl.X509TrustManager;
 
 import androidx.annotation.NonNull;
 
-public class CertData
+public final class CertData
 {
 	public final @NonNull X509TrustManager x509TrustManager;
 	public final @NonNull SSLContext sslContext;
