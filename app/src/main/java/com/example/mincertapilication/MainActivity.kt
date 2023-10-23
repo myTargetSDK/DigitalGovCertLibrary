@@ -2,6 +2,8 @@ package com.example.mincertapilication
 
 import android.content.Intent
 import android.os.Bundle
+import android.webkit.URLUtil
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +35,11 @@ class MainActivity : AppCompatActivity()
         setContentView(binding.root)
 
         binding.btnLoad.setOnClickListener {
+            if (!URLUtil.isValidUrl(URL))
+            {
+                Toast.makeText(this, "You need to redefine the URL variable", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
 
             when (binding.radioGroup.checkedRadioButtonId)
             {
