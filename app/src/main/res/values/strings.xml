@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Certs Demo</string>
+    <string name="app_name">Digital Gov Cert Library Demo</string>
 
     <string name="httpurlconnection">HttpUrlConnection</string>
     <string name="okhttp">OkHttp</string>
