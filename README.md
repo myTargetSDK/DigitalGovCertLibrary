@@ -15,7 +15,7 @@ implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
 #### Пример использования с OkHttp
 ```kotlin
     val certManager = CertManager()
-    val certData = certManager.createCertData(this@MainActivity)!!
+    val certData = certManager.createCertData(context)
     val httpClient = OkHttpClient
     .Builder()
     .sslSocketFactory(certData.sslContext.socketFactory, certData.x509TrustManager)
@@ -36,7 +36,7 @@ implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
 #### Пример использования с WebView
 ```kotlin
     val certManager = CertManager()
-    val certData = certManager.createCertData(this)!!
+    val certData = certManager.createCertData(context)
 
     webView.webViewClient = object : WebViewClient()
     {
