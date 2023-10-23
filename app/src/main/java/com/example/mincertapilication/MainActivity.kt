@@ -188,5 +188,6 @@ class MainActivity : AppCompatActivity()
     }
 }
 
-const val URL = "https://www.sberbank.ru/"
+//TODO You need to redefine the variable
+const val URL = "use your url"
 
