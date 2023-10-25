@@ -46,21 +46,21 @@ public final class CertManager
 	{
 		if (context == null)
 		{
-			Log.d(TAG, "Error make certData – context is null");
+			Log.e(TAG, "Error make certData – context is null");
 			return null;
 		}
 
 		final CertificateFactory certificateFactory = createCertificateFactory();
 		if (certificateFactory == null)
 		{
-			Log.d(TAG, "Error make certData – certificateFactory is null");
+			Log.e(TAG, "Error make certData – certificateFactory is null");
 			return null;
 		}
 
 		final KeyStore keyStore = createKeyStore();
 		if (keyStore == null)
 		{
-			Log.d(TAG, "Error make certData – keyStore is null");
+			Log.e(TAG, "Error make certData – keyStore is null");
 			return null;
 		}
 
@@ -97,21 +97,21 @@ public final class CertManager
 		final TrustManagerFactory trustManagerFactory = createTrustManagerFactory(keyStore);
 		if (trustManagerFactory == null)
 		{
-			Log.d(TAG, "Error make certData – trustManagerFactory is null");
+			Log.e(TAG, "Error make certData – trustManagerFactory is null");
 			return null;
 		}
 
 		final X509TrustManager x509TrustManager = findX509TrustManager(trustManagerFactory);
 		if (x509TrustManager == null)
 		{
-			Log.d(TAG, "Error make certData – x509TrustManager is null");
+			Log.e(TAG, "Error make certData – x509TrustManager is null");
 			return null;
 		}
 
 		final SSLContext sslContext = createSslContext(trustManagerFactory);
 		if (sslContext == null)
 		{
-			Log.d(TAG, "Error make certData – sslContext is null");
+			Log.e(TAG, "Error make certData – sslContext is null");
 			return null;
 		}
 		return new CertData(x509TrustManager, sslContext, trustManagerFactory);
