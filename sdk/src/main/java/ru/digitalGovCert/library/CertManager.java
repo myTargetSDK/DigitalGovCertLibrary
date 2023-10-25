@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
  */
 public final class CertManager
 {
-	final static String TAG = "CertManager";
+	private final static String TAG = "CertManager";
 	private final @NonNull List<String> rawCertNames;
 
 	public CertManager()
@@ -76,7 +76,7 @@ public final class CertManager
 				}
 				catch (KeyStoreException e)
 				{
-					e.printStackTrace();
+					Log.e(TAG, "", e);
 				}
 			}
 		}
@@ -90,7 +90,7 @@ public final class CertManager
 			}
 			catch (KeyStoreException e)
 			{
-				e.printStackTrace();
+				Log.e(TAG, "", e);
 			}
 		}
 
@@ -125,7 +125,7 @@ public final class CertManager
 		}
 		catch (CertificateException e)
 		{
-			Log.d(TAG, "Error make certData – certificate factory is null");
+			Log.e(TAG, "", e);
 			return null;
 		}
 	}
@@ -140,6 +140,8 @@ public final class CertManager
 		}
 		catch (Throwable e)
 		{
+			Log.e(TAG, "", e);
+
 			return null;
 		}
 	}
@@ -155,7 +157,7 @@ public final class CertManager
 		}
 		catch (Throwable e)
 		{
-			e.printStackTrace();
+			Log.e(TAG, "", e);
 			return null;
 		}
 	}
@@ -184,6 +186,8 @@ public final class CertManager
 		}
 		catch (Throwable e)
 		{
+			Log.e(TAG, "", e);
+
 			return null;
 		}
 	}

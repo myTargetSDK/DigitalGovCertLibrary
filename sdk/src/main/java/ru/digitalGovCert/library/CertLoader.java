@@ -2,6 +2,7 @@ package ru.digitalGovCert.library;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -26,6 +27,7 @@ final class CertLoader
 {
 	private final @NonNull Context context;
 	private final @NonNull CertificateFactory certificateFactory;
+	private final static String TAG = "CertLoader";
 
 	public CertLoader(final @NonNull Context context, final @NonNull CertificateFactory certificateFactory)
 	{
@@ -42,6 +44,7 @@ final class CertLoader
 		}
 		catch (CertificateException e)
 		{
+			Log.e(TAG, "", e);
 			return null;
 		}
 	}
@@ -70,14 +73,15 @@ final class CertLoader
 					}
 					catch (Throwable throwable)
 					{
-						throwable.printStackTrace();
+						Log.e(TAG, "", throwable);
+
 					}
 				}
 			}
 		}
 		catch (Throwable e)
 		{
-			e.printStackTrace();
+			Log.e(TAG, "", e);
 		}
 		return certificates;
 	}
@@ -104,7 +108,8 @@ final class CertLoader
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			Log.e(TAG, "", e);
+
 		}
 		return textBuilder.toString();
 	}
