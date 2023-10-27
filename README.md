@@ -11,7 +11,7 @@
 maven { url = "https://jitpack.io" }
 
 //application gradle
-implementation ("com.github.RinJavDev:DigitalGovCertLibrary:1.0.23")
+implementation ("com.github.RinJavDev:DigitalGovCertLibraryAndroid:1.0.23")
 ```
 #### Пример использования с OkHttp
 ```kotlin
