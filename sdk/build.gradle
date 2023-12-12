@@ -2,7 +2,7 @@ plugins {
     id 'com.android.library'
     id 'maven-publish'
 }
-var group = 'ru.digitalGovCert.library'
+var group = 'io.github.mytargetsdk'
 var version = '1.0.24'
 
 android {
@@ -47,7 +47,7 @@ publishing {
     publications {
         register("release", MavenPublication) {
             groupId = group
-            artifactId = "library"
+            artifactId = "digitalgovcert"
             this.version = version
 
             afterEvaluate {
@@ -55,7 +55,6 @@ publishing {
             }
         }
     }
-
 }
 
 

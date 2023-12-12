@@ -9,8 +9,8 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mincertapilication.databinding.ActivityWebViewBinding
-import ru.digitalGovCert.library.CertManager
-import ru.digitalGovCert.library.SslErrorVerifier
+import io.github.mytargetsdk.CertManager
+import io.github.mytargetsdk.SslErrorVerifier
 
 class WebViewActivity : AppCompatActivity()
 {

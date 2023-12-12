@@ -1,4 +1,4 @@
-package ru.digitalGovCert.library;
+package io.github.mytargetsdk;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
