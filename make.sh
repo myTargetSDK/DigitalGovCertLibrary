@@ -8,6 +8,13 @@ do
    esac
 done
 
+if [[ -z ${MY_VERSION} ]]; then
+  echo ":::::::::: ERROR: Version wasn't specified ::::::::::"
+  echo ":::::::::: You should specify version with '-v' flag ::::::::::"
+  echo ":::::::::: PUBLISHING FAILED ::::::::::"
+  exit 1
+fi
+
 ./gradlew clean
 ./gradlew :sdk:javaDocReleaseJar
 ./gradlew :sdk:generateMetadataFileForReleasePublication
