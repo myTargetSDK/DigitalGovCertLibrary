@@ -1,20 +1,21 @@
 #!/bin/bash
 
-MY_VERSION="1.0.25"
+while getopts "v:" opt
+do
+   case "$opt" in
+      v) MY_VERSION="$OPTARG" ;;
+      ?) helpFunction ;; # Print helpFunction in case parameter is non-existent
+   esac
+done
 
 ./gradlew clean
-./gradlew :sdk:javaDocReleaseJar
 ./gradlew :sdk:javaDocReleaseJar
 ./gradlew :sdk:generateMetadataFileForReleasePublication
 ./gradlew :sdk:publishReleasePublicationToMavenLocal
 ./gradlew :sdk:publishToMavenLocal
 
-cd ../
-cd ../
+cd ../../.m2/repository/io/github/mytargetsdk/digitalgovcert/${MY_VERSION}
 
-ls
-cd .m2/repository/io/github/mytargetsdk/digitalgovcert/${MY_VERSION}
-ls
 
 gpg -ab digitalgovcert-${MY_VERSION}.pom
 gpg -ab digitalgovcert-${MY_VERSION}-javadoc.jar
