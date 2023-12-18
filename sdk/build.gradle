@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 var group = 'io.github.mytargetsdk'
-var version = '1.0.24'
+var version = '1.0.25'
 
 android {
     compileSdkVersion 33
@@ -50,8 +50,31 @@ publishing {
             artifactId = "digitalgovcert"
             this.version = version
 
-            afterEvaluate {
-                from(components["release"])
+           afterEvaluate {
+               from(components["release"])
+           }
+
+            pom {
+                name = 'DigitalGovCert SDK'
+                description = 'Android SDK of DigitalGovCert'
+                url = 'https://target.my.com/partner/groups'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'myTarget'
+                        email = 'sdk_mytarget@corp.my.com'
+                    }
+                }
+                scm {
+                    connection = 'git@github.com:myTargetSDK/DigitalGovCertLibraryAndroid.git'
+                    developerConnection = 'git@github.com:myTargetSDK/DigitalGovCertLibraryAndroid.git'
+                    url = 'git@github.com:myTargetSDK/DigitalGovCertLibraryAndroid.git'
+                }
             }
         }
     }
