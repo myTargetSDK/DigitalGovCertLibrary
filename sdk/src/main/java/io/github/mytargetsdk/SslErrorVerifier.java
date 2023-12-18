@@ -1,4 +1,4 @@
-package ru.digitalGovCert.library;
+package io.github.mytargetsdk;
 
 import android.net.http.SslCertificate;
 import android.net.http.SslError;

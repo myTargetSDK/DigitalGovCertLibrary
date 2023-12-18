@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import ru.digitalGovCert.library.CertManager
+import io.github.mytargetsdk.CertManager
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.IOException

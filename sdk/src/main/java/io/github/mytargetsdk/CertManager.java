@@ -1,4 +1,4 @@
-package ru.digitalGovCert.library;
+package io.github.mytargetsdk;
 
 import android.content.Context;
 import android.util.Log;
