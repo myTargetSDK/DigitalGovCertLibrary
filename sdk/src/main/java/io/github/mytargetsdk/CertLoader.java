@@ -69,7 +69,10 @@ final class CertLoader
 						final String alias = aliases.nextElement();
 						final X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
 
-						certificates.add(cert);
+						if (cert != null)
+						{
+							certificates.add(cert);
+						}
 					}
 					catch (Throwable throwable)
 					{
