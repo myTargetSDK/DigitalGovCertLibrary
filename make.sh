@@ -21,7 +21,7 @@ fi
 ./gradlew :sdk:publishReleasePublicationToMavenLocal
 ./gradlew :sdk:publishToMavenLocal
 
-cd ../../.m2/repository/io/github/mytargetsdk/digitalgovcert/${MY_VERSION}
+cd ~/.m2/repository/io/github/mytargetsdk/digitalgovcert/${MY_VERSION}
 
 
 gpg -ab digitalgovcert-${MY_VERSION}.pom
