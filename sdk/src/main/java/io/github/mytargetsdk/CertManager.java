@@ -28,13 +28,13 @@ import androidx.annotation.Nullable;
 public final class CertManager
 {
 	private final static String TAG = "CertManager";
-	private final @NonNull List<String> rawCertNames;
+	private final @NonNull List<Integer> rawCertResIds;
 
 	public CertManager()
 	{
-		rawCertNames = new ArrayList<>();
-		rawCertNames.add("russian_trusted_root_ca");
-		rawCertNames.add("russian_trusted_sub_ca");
+		rawCertResIds = new ArrayList<>();
+		rawCertResIds.add(R.raw.russian_trusted_root_ca);
+		rawCertResIds.add(R.raw.russian_trusted_sub_ca);
 	}
 
 	/**
@@ -65,14 +65,29 @@ public final class CertManager
 		}
 
 		final CertLoader certLoader = new CertLoader(context, certificateFactory);
-		for (String rawCertName : rawCertNames)
+		for (int certResId : rawCertResIds)
 		{
-			final Certificate rawCert = certLoader.getRawCert(rawCertName);
+			final Certificate rawCert = certLoader.getRawCert(certResId);
 			if (rawCert != null)
 			{
 				try
 				{
-					keyStore.setCertificateEntry(rawCertName, rawCert);
+					final String certSuffix;
+					if (certResId == R.raw.russian_trusted_root_ca)
+					{
+						certSuffix = "root_ca";
+					}
+					else if (certResId == R.raw.russian_trusted_sub_ca)
+					{
+						certSuffix = "sub_ca";
+					}
+					else
+					{
+						certSuffix = "resid_" + certResId;
+					}
+
+					String alias = "russian_trusted_" + certSuffix;
+					keyStore.setCertificateEntry(alias, rawCert);
 				}
 				catch (KeyStoreException e)
 				{

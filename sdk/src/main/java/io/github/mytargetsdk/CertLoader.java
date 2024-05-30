@@ -1,6 +1,8 @@
 package io.github.mytargetsdk;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -10,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -22,6 +23,7 @@ import java.util.Enumeration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 
 final class CertLoader
 {
@@ -35,18 +37,22 @@ final class CertLoader
 		this.certificateFactory = certificateFactory;
 	}
 
-	final @Nullable Certificate getRawCert(@NonNull String rawResourceName)
+	final @Nullable Certificate getRawCert(final @RawRes int certResId)
 	{
-		final InputStream subIns = readPemCert(rawResourceName);
 		try
 		{
-			return certificateFactory.generateCertificate(subIns);
+			final InputStream subIns = readPemCert(certResId);
+			if (subIns != null)
+			{
+				return certificateFactory.generateCertificate(subIns);
+			}
 		}
 		catch (CertificateException e)
 		{
 			Log.e(TAG, "", e);
-			return null;
 		}
+
+		return null;
 	}
 
 	final @NonNull ArrayList<X509Certificate> getSystemCerts()
@@ -89,19 +95,42 @@ final class CertLoader
 		return certificates;
 	}
 
-	private final InputStream readPemCert(final @NonNull String certName)
+	private final @Nullable InputStream readPemCert(final @RawRes int certResId)
 	{
-		return fromPem(getPemAsString(certName));
+		try
+		{
+			String pem = getPemAsString(certResId);
+
+			if (TextUtils.isEmpty(pem))
+			{
+				return null;
+			}
+
+			return fromPem(pem);
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, "unexpected error, certResId=" + certResId, e);
+			return null;
+		}
 	}
 
-	private final String getPemAsString(final @NonNull String certName)
+	private final @Nullable String getPemAsString(final @RawRes int certResId)
 	{
-		final InputStream ins = context.getResources().openRawResource(
-				context.getResources().getIdentifier(
-						certName, "raw", context.getPackageName()));
+		final InputStream ins;
+
+		try
+		{
+			ins = context.getResources().openRawResource(certResId);
+		}
+		catch (Resources.NotFoundException e)
+		{
+			Log.e(TAG, "resource not found, certResId=" + certResId, e);
+			return null;
+		}
+
 		StringBuilder textBuilder = new StringBuilder();
-		try (Reader reader = new BufferedReader(new InputStreamReader
-														(ins, Charset.forName(StandardCharsets.UTF_8.name()))))
+		try (Reader reader = new BufferedReader(new InputStreamReader(ins, StandardCharsets.UTF_8)))
 		{
 			int c = 0;
 			while ((c = reader.read()) != -1)
@@ -112,8 +141,8 @@ final class CertLoader
 		catch (IOException e)
 		{
 			Log.e(TAG, "", e);
-
 		}
+
 		return textBuilder.toString();
 	}
 
