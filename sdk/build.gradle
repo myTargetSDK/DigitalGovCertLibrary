@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 var group = 'io.github.mytargetsdk'
-var version = '1.0.25'
+var version = '1.0.26'
 
 android {
     compileSdkVersion 33
